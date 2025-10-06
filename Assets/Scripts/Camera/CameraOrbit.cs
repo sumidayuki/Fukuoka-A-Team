@@ -25,8 +25,6 @@ public class CameraOrbit_MouseDrag : MonoBehaviour
         {
             float mouseX = Input.GetAxis("Mouse X");
             targetYaw += mouseX * rotateSpeed;
-            // ‰ñ“]§ŒÀiY²}90‹180‹‚Ì”ÍˆÍ‚É§ŒÀj
-            targetYaw = Mathf.Clamp(targetYaw, -180f, 180f);
         }
     }
 

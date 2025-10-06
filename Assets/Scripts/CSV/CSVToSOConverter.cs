@@ -58,11 +58,14 @@ public static class CSVToSOConverter
         }
 
         rowField.SetValue(asset, rowArray);
+<<<<<<< HEAD
 
         string soPath = Path.Combine(soDir, soType.Name + ".asset");
         if (!AssetDatabase.Contains(asset)) AssetDatabase.CreateAsset(asset, soPath);
 
         EditorUtility.SetDirty(asset);
+=======
+>>>>>>> main
     }
 }
 

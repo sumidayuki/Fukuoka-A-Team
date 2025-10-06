@@ -6,6 +6,9 @@ using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
 
+/// <summary>
+/// CSVファイルの中身を参照して対応するScriptableObjectに変換します。
+/// </summary>
 public static class CSVToSOConverter
 {
     [MenuItem("Tools/CSV/Convert ALL CSVs")]

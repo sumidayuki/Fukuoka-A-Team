@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf3210ec37e21e46a799b6a65bca014, type: 3}
   m_Name: BombData
   m_EditorClassIdentifier: 
+  rows:
+  - id: 0
+    name: normal
+    x: 01000000
+    y: 01000000
+    z: 01000000

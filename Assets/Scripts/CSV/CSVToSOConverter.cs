@@ -53,8 +53,23 @@ public static class CSVToSOConverter
             {
                 if(dict.TryGetValue(field.Name, out string value))
                 {
-                    try { field.SetValue(row, Convert.ChangeType(value, field.FieldType)); }
-                    catch { Debug.LogWarning($"CSV•ÏŠ·Ž¸”s"); }
+                    try
+                    {
+                        if (field.FieldType.IsArray)
+                        {
+                            var elementType = field.FieldType.GetElementType();
+                            var parts = value.Split('|');
+                            Array arr = Array.CreateInstance(elementType, parts.Length);
+                            for (int k = 0; k < parts.Length; k++)
+                                arr.SetValue(Convert.ChangeType(parts[k], elementType), k);
+                            field.SetValue(row, arr);
+                        }
+                        else
+                        {
+                            field.SetValue(row, Convert.ChangeType(value, field.FieldType));
+                        }
+                    }
+                    catch { Debug.LogWarning($"CSV•ÏŠ·Ž¸”s: {field.Name}"); }
                 }
             }
             rowArray.SetValue(row, i);

@@ -7,9 +7,9 @@ public class BombRow
 {
     public int id;
     public string name;
-    public Vector2 x;
-    public Vector2 y;
-    public Vector2 z;
+    public int[] x;
+    public int[] y;
+    public int[] z;
 }
 
 [CreateAssetMenu(fileName = "BombData", menuName = "GameData/BombData")]

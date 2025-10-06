@@ -9,17 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: faf3210ec37e21e46a799b6a65bca014, type: 3}
-  m_Name: BombData
+  m_Script: {fileID: 11500000, guid: 737367193e285434280723e0734a02fc, type: 3}
+  m_Name: StageData
   m_EditorClassIdentifier: 
-  rows:
-  - id: 0
-    name: normal
-    x: 0100000001000000
-    y: 0100000001000000
-    z: 0100000001000000
-  - id: 1
-    name: T
-    x: 01000000ffffffff
-    y: 01000000
-    z: 02000000
+  rows: []

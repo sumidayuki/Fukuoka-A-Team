@@ -10,6 +10,7 @@ public class BombRow
     public int[] x;
     public int[] y;
     public int[] z;
+    public float time;
 }
 
 [CreateAssetMenu(fileName = "BombData", menuName = "GameData/BombData")]

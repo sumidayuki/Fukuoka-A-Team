@@ -12,7 +12,6 @@ public class DataManager : MonoBehaviour
     [SerializeField] private BombData bombData;
     [SerializeField] private StageData stageData;
 
-    // 辞書化して高速アクセスしたい場合
     private Dictionary<int, BombRow> bombDict;
     private Dictionary<int, StageRow> stageDict;
 

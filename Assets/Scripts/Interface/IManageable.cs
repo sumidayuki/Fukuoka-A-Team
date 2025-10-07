@@ -1,4 +1,6 @@
+using System.Collections;
+
 public interface IManageable
 {
-    void Load();
+    IEnumerator Load();
 }

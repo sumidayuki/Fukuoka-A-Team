@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Player
 {
-    // Start is called before the first frame update
-    void Start()
+    private StateManager<Player> statemanager;
+
+    private CameraOrbit_MouseDrag camera;
+    
+    public Rigidbody Rb;
+    public Transform Model;
+    
+
+    public void Enter()
     {
+        statemanager = new StateManager<Player>();
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Execute()
     {
-        
+
     }
 }

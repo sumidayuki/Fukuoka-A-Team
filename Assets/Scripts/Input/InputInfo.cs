@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputInfo : MonoBehaviour
+public class InputInfo 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Vector3 Move { get; set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector2 Look { get; set; }
+
+    public bool Plant { get; set; }
+
+    public bool Pause { get; set; }
 }

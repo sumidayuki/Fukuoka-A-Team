@@ -6,6 +6,5 @@ public class GameManager : MonoBehaviour
 {
     private static readonly List<BaseUpdate> systems = new();
 
-    
-    
+
 }

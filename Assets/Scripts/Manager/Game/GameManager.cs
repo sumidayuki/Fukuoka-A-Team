@@ -47,7 +47,16 @@ public class GameManager : MonoBehaviour
         m_loadingPanel.SetActive(false);
 
         m_stateManager = new StateManager<GameManager>();
-        m_stateManager.Init(new GameLoadingState(), this);
+
+        if (LoadTarget != null)
+        {
+            m_stateManager.Init(new GameLoadingState(), this);
+        }
+        else
+        {
+            m_stateManager.Init(new GamePlayState(), this);
+
+        }
     }
 
     private void Update()

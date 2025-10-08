@@ -9,16 +9,15 @@ public class PlayerMoveState : StateBase<Player>
     private Rigidbody rb;
     private Transform model;
     private Transform cam;
-
     private float walkSpeed = 3.0f;
     private float turnLerp = 10f;
 
     public override void Enter(Player player)
     {
-        base.Enter(player);
+       
         rb = player.Rb;
         model = player.Model;
-        cam = Camera.main ? Camera.main.transform : null;
+        cam = (Camera.main != null) ? Camera.main.transform : null;
 
         if (rb)
         {
@@ -26,10 +25,9 @@ public class PlayerMoveState : StateBase<Player>
         }
     }
 
-    public override void Execute(Player character, InputInfo input)
+    public override void Execute(Player player, InputInfo input)
     {
         Vector3 inDir = input.Move;
-        inDir.y = 0f;
         if (inDir.sqrMagnitude < 0.0001f) return;
         inDir.Normalize();
 
@@ -38,7 +36,8 @@ public class PlayerMoveState : StateBase<Player>
         {
             Vector3 f = Vector3.ProjectOnPlane(cam.forward, Vector3.up).normalized;
             Vector3 r = Vector3.ProjectOnPlane(cam.right, Vector3.up).normalized;
-            inDir = (f * input.Move.z + r * input.Move.x).normalized;
+            inDir = f * inDir.z + r * inDir.x;
+            inDir.Normalize();
         }
 
         Vector3 next = rb.position + inDir * walkSpeed * Time.deltaTime;
@@ -46,8 +45,8 @@ public class PlayerMoveState : StateBase<Player>
 
         if (model != null)
         {
-            Quaternion targetRot = Quaternion.LookRotation(inDir);
-            model.rotation = Quaternion.Slerp(model.rotation, targetRot, turnLerp * Time.deltaTime);
+            Quaternion target = Quaternion.LookRotation(inDir);
+            model.rotation = Quaternion.Slerp(model.rotation, target, turnLerp * Time.deltaTime);
             
         }
     }

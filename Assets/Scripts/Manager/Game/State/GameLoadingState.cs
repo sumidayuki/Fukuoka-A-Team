@@ -16,6 +16,7 @@ public class GameLoadingState : StateBase<GameManager>
     public override void Enter(GameManager gm)
     {
         isLoaded = false;
+        gm.GetLoadingPanel.SetActive(true);
         gm.StartCoroutine(Load(gm));
     }
 
@@ -29,5 +30,6 @@ public class GameLoadingState : StateBase<GameManager>
 
     public override void Exit(GameManager gm)
     {
+        gm.GetLoadingPanel.SetActive(false);
     }
 }

@@ -29,6 +29,10 @@ public class GameManager : MonoBehaviour
     // Load‚·‚éÛ‚ÌIManageable‚ğ•Û
     public IManageable LoadTarget { get; private set; }
 
+    [SerializeField] GameObject m_loadingPanel;
+
+    public GameObject GetLoadingPanel { get { return m_loadingPanel; } }
+
     private void Start()
     {
         if(LoadTarget != null)
@@ -39,6 +43,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("IManageable‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½");
         }
+
+        m_loadingPanel.SetActive(false);
 
         m_stateManager = new StateManager<GameManager>();
         m_stateManager.Init(new GameLoadingState(), this);

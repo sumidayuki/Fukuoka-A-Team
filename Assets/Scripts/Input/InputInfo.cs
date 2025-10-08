@@ -8,6 +8,10 @@ public class InputInfo
 
     public Vector2 Look { get; set; }
 
+    public bool RightClick { get; set; }
+
+    public bool LeftClick { get; set; }
+
     public bool Plant { get; set; }
 
     public bool Pause { get; set; }

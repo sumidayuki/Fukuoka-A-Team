@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class Player
 {
-    private StateManager<Player> statemanager;
+    public Rigidbody Rb { get; set; }
+    public Transform Model { get; set; }
 
-    private CameraOrbit_MouseDrag camera;
+    private StateManager<Player> stateManager;
     
-    public Rigidbody Rb;
-    public Transform Model;
-    
-
     public void Enter()
     {
-        statemanager = new StateManager<Player>();
-        
+        stateManager = new StateManager<Player>();
+        stateManager.Init(new PlayerMoveState(), this);
     }
 
-    public void Execute()
+    public void Execute(InputInfo input)
     {
-
+        stateManager.CurrentState.Execute(this, input);
     }
+
+    public void ChangeState(StateBase<Player> newState)
+    {
+        stateManager.ChangeState(newState, this);
+    }
+
 }

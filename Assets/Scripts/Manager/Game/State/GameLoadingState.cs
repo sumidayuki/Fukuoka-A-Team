@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameLoadingState : StateBase<GameManager>
 {
@@ -8,11 +9,19 @@ public class GameLoadingState : StateBase<GameManager>
 
     private IEnumerator Load(GameManager gm)
     {
-        yield return gm.LoadTarget.Load();
+        if (gm.LoadTarget != null)
+        {
+            Debug.Log("Load");
+            yield return gm.LoadTarget.Load();
+        }
+        else
+        {
+            yield return null;
+        }
 
         isLoaded = true;
     }
-    
+
     public override void Enter(GameManager gm)
     {
         isLoaded = false;

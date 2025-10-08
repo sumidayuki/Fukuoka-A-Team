@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    private bool isStart;
 
     private void Awake()
     {
@@ -17,8 +20,16 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        isStart = false;
+
         BaseUpdates = new List<BaseUpdate>();
-        LoadTarget = FindObjectOfType<BaseUpdate>().GetComponent<IManageable>();
+
+        FindLoadTarget();
+
+        m_stateManager = new StateManager<GameManager>();
+        m_stateManager.Init(new GameLoadingState(), this);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private StateManager<GameManager> m_stateManager;
@@ -43,20 +54,6 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("IManageableが見つからなかった");
         }
-
-        m_loadingPanel.SetActive(false);
-
-        m_stateManager = new StateManager<GameManager>();
-
-        if (LoadTarget != null)
-        {
-            m_stateManager.Init(new GameLoadingState(), this);
-        }
-        else
-        {
-            m_stateManager.Init(new GamePlayState(), this);
-
-        }
     }
 
     private void Update()
@@ -79,6 +76,24 @@ public class GameManager : MonoBehaviour
         m_stateManager.ChangeState(newState, gm);
     }
 
+    public void LoadTo(string nextSceneName)
+    {
+        m_loadingPanel.SetActive(true);
+        LoadTarget = null;
+        StartCoroutine(LoadScene(nextSceneName));
+    }
+
+    public IEnumerator LoadScene(string nextSceneName)
+    {
+        AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
+
+        while (!async.isDone)
+        {
+            yield return null;
+        }
+
+    }
+
     /// <summary>
     /// BaseUpdate を継承しているクラスを登録します。
     /// 登録をすることで BaseUpdate から更新などの処理が呼び出されます。
@@ -99,5 +114,27 @@ public class GameManager : MonoBehaviour
     public void UnregisterSystem(BaseUpdate system)
     {
         BaseUpdates.Remove(system);
+    }
+
+    private void FindLoadTarget()
+    {
+        foreach (var baseUpdate in FindObjectsOfType<BaseUpdate>())
+        {
+            var manageable = baseUpdate.GetComponent<IManageable>();
+            if (manageable != null)
+            {
+                LoadTarget = manageable;
+                break;
+            }
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!isStart) isStart = !isStart;
+
+        Debug.Log($"シーンがロードされました: {scene.name}, モード: {mode}");
+        FindLoadTarget();
+        ChangeState(new GameLoadingState(), this);
     }
 }

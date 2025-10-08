@@ -9,8 +9,9 @@ public class DataManager : MonoBehaviour
     public static DataManager Instance { get; private set; }
 
     [Header("データアセット参照")]
-    [SerializeField] private BombData bombData;
-    [SerializeField] private StageData stageData;
+    [SerializeField] PlayerData playerData;
+    [SerializeField] BombData bombData;
+    [SerializeField] StageData stageData;
 
     private Dictionary<int, BombRow> bombDict;
     private Dictionary<int, StageRow> stageDict;
@@ -41,17 +42,37 @@ public class DataManager : MonoBehaviour
             stageDict[row.id] = row;
     }
 
-    // 爆弾データ取得
+    /// <summary>
+    /// PlayerData を取得します。
+    /// </summary>
+    /// <returns></returns>
+    public PlayerData GetPlayerData() { return playerData; }
+
+    /// <summary>
+    /// BombData から指定の爆弾を取得します。
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public BombRow GetBomb(int id)
     {
         bombDict.TryGetValue(id, out var row);
         return row;
     }
 
-    // ステージデータ取得
+    /// <summary>
+    /// StageData から指定のステージ情報を取得します。
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public StageRow GetStage(int id)
     {
         stageDict.TryGetValue(id, out var row);
         return row;
     }
+
+    /// <summary>
+    /// ステージデータを取得します。
+    /// </summary>
+    /// <returns></returns>
+    public StageData GetStageData() { return stageData; }
 }

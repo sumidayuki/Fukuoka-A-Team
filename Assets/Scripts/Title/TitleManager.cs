@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class TitleManager : BaseUpdate, IManageable
 {
-    public void Start()
+    void Start()
     {
-        if(GameManager.Instance != null)
         GameManager.Instance.RegisterSystem(this);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.UnregisterSystem(this);
     }
 
     public IEnumerator Load()

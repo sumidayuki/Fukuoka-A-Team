@@ -1,0 +1,41 @@
+【やることリスト】
+・IDamageableインターフェイスの作成
+	・このインターフェイスを継承していると爆弾からDamageを受けることができる。
+
+・Playerの完成
+	・移動速度をPlayerDataから取得
+	・爆弾設置
+	・カメラ
+	・死亡処理
+	・モーション
+	
+・Enemyの作成
+	・死亡処理
+	
+・ステージを作成できる状態に
+	・ステージを制作するシーンのテンプレートを作成
+	・Fieldを制作するようのFieldRootオブジェクトを作成（この中にプランナーがブロックを配置していく）
+	・PlayerSpawner,EnemySpawnerの作成（空のオブジェクトでタグで分けるイメージ）
+	・フィールドに配置するオブジェクトをLayer分け & Tag分け（破壊可能ブロックや非破壊ブロックなどはLayer、床や壁などはTag）
+	
+・ステージマネージャー完成
+	・Sceneの名前から自分のStageIDを取得して、対応するStageRowをDataManagerから取得
+	（例）
+		string sceneName = SceneManager.GetActiveScene().name;	// "Stage_0"
+		string[] parts = sceneName.Split('_');                  // ["Stage", "0"]
+		int stageId = int.Parse(parts[1]);                     	// 0
+		
+	・FieldRootに入っている子オブジェクトを全て探索してPlayerSpawnerとEnemySpawnerを取得し、その位置にPlayer、Enemyを作成
+	・使用可能爆弾リストを保持
+	・UIと連携して現在選択中の爆弾を持っておく
+	・爆弾の残数を監視
+	・敵全滅 or 爆弾使い切りの判定（爆弾を使い切った後、5秒のカウントダウンを行い敵を倒したか倒していないかでクリア判定を行う）
+	・結果をGameManagerへ通知（State遷移）
+	・爆弾の残数などのUI管理（別途StageUIクラスなどを作成しそれを管理する形）
+	
+・爆弾の作成
+	・爆発でダメージを与える処理
+	・爆発に当たった爆弾が爆発する連鎖処理
+	・エフェクト
+	
+・SoundManagerの作成

@@ -19,9 +19,6 @@ public class Player
     {
         stateManager.CurrentState.Execute(this, input);
     }
-<<<<<<< HEAD
-}
-=======
 
     public void ChangeState(StateBase<Player> newState)
     {
@@ -29,4 +26,3 @@ public class Player
     }
 
 }
->>>>>>> main

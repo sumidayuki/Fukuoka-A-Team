@@ -18,6 +18,6 @@ public class BombGenerator : MonoBehaviour
 
     public void OnGenerate()
     {
-        m_bomb.GetComponent<Bomb>().Plant();
+        m_bomb.GetComponent<Bomb>().Plant(gameObject.transform);
     }
 }

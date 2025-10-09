@@ -35,14 +35,6 @@ public class PlayerController : BaseUpdate
     public override void Execute()
     {
         player.Execute(input);
-
-#if ENABLE_INPUT_SYSTEM
-        input.Plant = UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame;
-#else
-        input.Plant = Input.GetKeyDown(KeyCode.Space);
-#endif
-
-        player.Execute(input);
     }
 
     public override void LateExecute()

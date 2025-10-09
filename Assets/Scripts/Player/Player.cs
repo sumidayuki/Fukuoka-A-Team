@@ -7,11 +7,10 @@ public class Player : IDamageable
 {
     // 外部からセットされる参照(PlayerControllerで代入)
     public Rigidbody Rb { get; set; }
-    public Transform Model { get; set; }
+
+    public Transform PlayerTransform { get; set; }
 
     public PlayerCamera Cam { get; private set; }
-
-   
 
     // データ由来のパラメータ
     public float MoveSpeed { get; private set; } = 3.0f;
@@ -22,18 +21,26 @@ public class Player : IDamageable
     
     public void Enter(PlayerData data = null)
     {
+        if (data != null)
+            MoveSpeed = data.moveSpeed;
+
+        Cam = Camera.main.gameObject.AddComponent<PlayerCamera>();
+        Cam.SetTarget(StageManager.Instance.GetStageCenter());
+
         _stateManager = new StateManager<Player>();
         _stateManager.Init(new PlayerMoveState(), this);
-
-        
-
-        Cam = Camera.main.gameObject.GetComponent<PlayerCamera>();
     }
 
     public void Execute(InputInfo input)
     {
         if (_isDead) return;
         _stateManager.CurrentState.Execute(this, input);
+    }
+
+    public void FixedExecute(InputInfo input)
+    {
+        if (_isDead) return;
+        _stateManager.CurrentState.FixedExecute(this, input);
     }
 
     public void LateExecute(InputInfo input)
@@ -47,8 +54,6 @@ public class Player : IDamageable
     {
         _stateManager.ChangeState(newState, this);
     }
-
-   
 
     public void Damage(float amount)
     {

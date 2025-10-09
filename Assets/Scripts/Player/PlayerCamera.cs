@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCamera : BaseUpdate
 {
-    [SerializeField] private Transform target;
+    public Transform Target { get; set; }
     [SerializeField] private Vector3 offset = new Vector3(0, 1, -10);
     [SerializeField] private float followSpeed = 10f;
     [SerializeField] private float rotateSpeed = 3f;
@@ -15,7 +15,7 @@ public class PlayerCamera : BaseUpdate
     
     public void CameraUpdate(InputInfo input)
     {
-        if (target == null) return;
+        if (Target == null) return;
 
         if (input.RightClick)
         {
@@ -24,12 +24,12 @@ public class PlayerCamera : BaseUpdate
         }
 
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
-        Vector3 desired = target.position + rotation * offset;
+        Vector3 desired = Target.position + rotation * offset;
 
         transform.position = Vector3.Lerp(transform.position, desired, Time.deltaTime * followSpeed);
-        transform.LookAt(target);
+        transform.LookAt(Target);
     }
 
-    public void SetTarget(Transform t) => target = t;
+    public void SetTarget(Transform t) => Target = t;
     
 }

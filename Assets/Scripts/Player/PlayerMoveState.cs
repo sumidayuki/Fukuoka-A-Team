@@ -7,7 +7,6 @@ using UnityEngine;
 public class PlayerMoveState : StateBase<Player>
 {
     private Rigidbody rb;
-    private Transform model;
     private Transform cam;
     
     private float turnLerp = 10f;
@@ -16,7 +15,6 @@ public class PlayerMoveState : StateBase<Player>
     {
        
         rb = player.Rb;
-        model = player.Model;
         cam = Camera.main ? Camera.main.transform : null;
 
         if (rb != null)
@@ -24,6 +22,15 @@ public class PlayerMoveState : StateBase<Player>
     }
 
     public override void Execute(Player player, InputInfo input)
+    {
+        // 爆弾設置入力が来たら設置ステートへ
+        if (input.Plant)
+        {
+            player.ChangeState(new PlayerPlantState());
+        }
+    }
+
+    public override void FixedExecute(Player player, InputInfo input)
     {
         Vector3 inDir = input.Move;
         if (inDir.sqrMagnitude < 0.0001f) return;
@@ -38,22 +45,15 @@ public class PlayerMoveState : StateBase<Player>
             inDir.Normalize();
         }
 
-        // 爆弾設置入力が来たら遷移してこのフレームは終了
-        if (input.Plant)
-        {
-            player.ChangeState(new PlayerPlantState());
-            return;
-        }
-
         // 位置更新(速度はPlayerData由来)
         Vector3 next = rb.position + inDir * player.MoveSpeed * Time.deltaTime;
         rb.MovePosition(next);
 
         // 向き
-        if (model != null)
+        if (player.PlayerTransform != null)
         {
             Quaternion target = Quaternion.LookRotation(inDir);
-            model.rotation = Quaternion.Slerp(model.rotation, target, turnLerp * Time.deltaTime);
+            player.PlayerTransform.rotation = Quaternion.Slerp(player.PlayerTransform.rotation, target, turnLerp * Time.deltaTime);
         }
     }
 }

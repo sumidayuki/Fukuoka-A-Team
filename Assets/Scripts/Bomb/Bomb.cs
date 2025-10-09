@@ -73,7 +73,7 @@ public class Bomb : MonoBehaviour
 
     private void Update()
     {
-        if(m_bombPrefab.activeSelf)
+        if(this.gameObject.activeSelf)
         {
             m_myBomb.time -= Time.deltaTime;
 
@@ -88,7 +88,6 @@ public class Bomb : MonoBehaviour
     {
         gameObject.transform.position = transform.position;
         gameObject.transform.rotation = transform.rotation;
-        gameObject.SetActive(true);
         m_bombPrefab.gameObject.SetActive(true);
         m_explosiveTransform.gameObject.SetActive(false);
     }
@@ -104,7 +103,5 @@ public class Bomb : MonoBehaviour
         m_myBomb.time = 3.0f;
 
         GenerateExplodeRange();
-
-        this.gameObject.SetActive(false);
     }
 }

@@ -27,6 +27,7 @@ public class PlayerMoveState : StateBase<Player>
 
     public override void Execute(Player player, InputInfo input)
     {
+        Debug.Log("ˆÚ“®’†");
         Vector3 inDir = input.Move;
         if (inDir.sqrMagnitude < 0.0001f) return;
         inDir.Normalize();

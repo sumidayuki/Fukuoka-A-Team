@@ -23,6 +23,7 @@ public class PlayerController : BaseUpdate
 
     public override void Enter()
     {
+        input = InputManager.Instance.Info;
         player = new Player();
         player.Rb = rb;
         player.Model = model;
@@ -31,7 +32,6 @@ public class PlayerController : BaseUpdate
 
     public override void Execute()
     {
-        input.Move = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
         player.Execute(input);
     }
 }

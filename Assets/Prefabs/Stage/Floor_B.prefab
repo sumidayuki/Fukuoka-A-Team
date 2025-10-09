@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2376491718831744479}
   - component: {fileID: 5013026930731033160}
   - component: {fileID: 1749735181051011435}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: polySurface202
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,9 +92,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7981529738992288498}
-  - component: {fileID: -2451848537787328870}
-  m_Layer: 8
-  m_Name: Floor
+  - component: {fileID: 3634471726926230114}
+  m_Layer: 7
+  m_Name: Floor_B
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ Transform:
   - {fileID: 2376491718831744479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &-2451848537787328870
+--- !u!65 &3634471726926230114
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

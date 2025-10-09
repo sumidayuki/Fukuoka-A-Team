@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class PlayerMoveState : StateBase<Player>
 {
     private Rigidbody rb;
@@ -11,9 +9,14 @@ public class PlayerMoveState : StateBase<Player>
     
     private float turnLerp = 10f;
 
+    PlayerMoveSMB m_moveSMB;
+
     public override void Enter(Player player)
     {
-       
+        player.Anim.SetTrigger("Walk");
+
+        m_moveSMB = player.GetBehaviour<PlayerMoveSMB>();
+        
         rb = player.Rb;
         cam = Camera.main ? Camera.main.transform : null;
 
@@ -23,8 +26,13 @@ public class PlayerMoveState : StateBase<Player>
 
     public override void Execute(Player player, InputInfo input)
     {
+        if(input.Plant)
+        {
+            m_moveSMB.PlantInput();
+        }
+
         // 爆弾設置入力が来たら設置ステートへ
-        if (input.Plant)
+        if (m_moveSMB.StateChangePlant)
         {
             player.ChangeState(new PlayerPlantState());
         }
@@ -55,5 +63,9 @@ public class PlayerMoveState : StateBase<Player>
             Quaternion target = Quaternion.LookRotation(inDir);
             player.PlayerTransform.rotation = Quaternion.Slerp(player.PlayerTransform.rotation, target, turnLerp * Time.deltaTime);
         }
+    }
+
+    public override void Exit(Player player)
+    {
     }
 }

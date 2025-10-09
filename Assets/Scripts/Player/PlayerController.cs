@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class PlayerController : BaseUpdate
 {
-    [Header("=== Player Components ===")]
-    [SerializeField] private Rigidbody rb;
-
-    [Header("=== Player Settings ===")]
-    [SerializeField] private PlayerData playerData;
-
     private Player player;
     private InputInfo input;
 
@@ -25,10 +19,8 @@ public class PlayerController : BaseUpdate
     public override void Enter()
     {
         input = InputManager.Instance.Info;
-        player = new Player();
-        player.Rb = GetComponent<Rigidbody>();
-        player.PlayerTransform = this.gameObject.transform;
-        player.Enter(playerData);
+        player = gameObject.AddComponent<Player>();
+        player.Enter();
     }
 
     public override void Execute()

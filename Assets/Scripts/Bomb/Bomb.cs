@@ -66,7 +66,7 @@ public class Bomb : MonoBehaviour
         }
         for (int i = 0; i < m_myBomb.back; i++)
         {
-            GameObject obj = Instantiate(m_bombPrefab, m_explosiveTransform.position + Vector3.back * (i + 1), Quaternion.identity);
+            GameObject obj = Instantiate(m_explosivePrefab, m_explosiveTransform.position + Vector3.back * (i + 1), Quaternion.identity);
             obj.transform.SetParent(m_explosiveTransform);
         }
     }

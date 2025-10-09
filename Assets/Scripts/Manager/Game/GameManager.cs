@@ -116,6 +116,16 @@ public class GameManager : MonoBehaviour
         BaseUpdates.Remove(system);
     }
 
+    public void GameClear()
+    {
+
+    }
+
+    public void GameOver()
+    {
+
+    }
+
     private void FindLoadTarget()
     {
         foreach (var baseUpdate in FindObjectsOfType<BaseUpdate>())

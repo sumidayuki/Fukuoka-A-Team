@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 ///ステージ全体を管理するマネージャークラス
@@ -13,7 +14,7 @@ public class StageManager : BaseUpdate, IManageable
 
     #region ステージデータ
     [Header("ステージデータ")]
-    [SerializeField] private int m_currentStageId = 0;
+    private int m_currentStageId = 0;
     private StageRow m_currentStageData;
     private Vector3Int m_stageSize;
 
@@ -25,6 +26,7 @@ public class StageManager : BaseUpdate, IManageable
     private Dictionary<int, int> m_bombInventoryDict = new Dictionary<int, int>();
     private int m_currentBombCount = 0;
     private const int MAX_BOMB_COUNT = 3;
+    private int m_selectedBombId = 0; // 現在選択中の爆弾ID
     #endregion
 
     #region エネミー管理
@@ -55,6 +57,17 @@ public class StageManager : BaseUpdate, IManageable
     [SerializeField] private float m_fallDeathY = -10f;
     #endregion
 
+    #region FieldRoot
+    [Header("FieldRoot")]
+    [SerializeField] private Transform m_fieldRoot;
+    #endregion
+
+    #region カウントダウン
+    [Header("カウントダウン")]
+    private bool m_isCountingDown = false;
+    private float m_countdownTimer = 5f;
+    #endregion
+
     #region 初期化
     private void Awake()
     {
@@ -79,9 +92,7 @@ public class StageManager : BaseUpdate, IManageable
         Debug.Log("StageManager: ロード開始");
 
         yield return StartCoroutine(LoadStageData());
-        yield return StartCoroutine(GenerateStage());
-        yield return StartCoroutine(SpawnPlayer());
-        yield return StartCoroutine(SpawnEnemies());
+        yield return StartCoroutine(FindSpawnersAndGenerate());
 
         SetupCameraPivot();
 
@@ -91,9 +102,18 @@ public class StageManager : BaseUpdate, IManageable
 
     private IEnumerator LoadStageData()
     {
-        if (GameManager.Instance != null)
+        //シーン名からステージID取得
+        string sceneName = SceneManager.GetActiveScene().name;  // "Stage_0"
+        string[] parts = sceneName.Split('_');                  // ["Stage", "0"]
+
+        if (parts.Length >= 2 && int.TryParse(parts[1], out int stageId))
         {
-            // m_currentStageId = GameManager.Instance.GetCurrentStageId();
+            m_currentStageId = stageId;
+        }
+        else
+        {
+            Debug.LogError($"シーン名からステージIDを取得できませんでした: {sceneName}");
+            yield break;
         }
 
         if (DataManager.Instance != null)
@@ -102,7 +122,7 @@ public class StageManager : BaseUpdate, IManageable
 
             if (m_currentStageData != null)
             {
-                // size配列からVector3Intに変換
+                //size配列からVector3Intに変換
                 if (m_currentStageData.size != null && m_currentStageData.size.Length >= 3)
                 {
                     m_stageSize = new Vector3Int(
@@ -143,33 +163,66 @@ public class StageManager : BaseUpdate, IManageable
 
                 Debug.Log($"爆弾 ID:{bombId} 個数:{count}");
             }
+
+            //最初の爆弾を選択状態に
+            if (length > 0)
+            {
+                m_selectedBombId = m_currentStageData.bombIds[0];
+            }
         }
     }
     #endregion
 
     #region ステージ生成
-    private IEnumerator GenerateStage()
+    private IEnumerator FindSpawnersAndGenerate()
     {
-        Debug.Log("ステージ生成中...");
-
-        //スポナーを使ってブロックを配置（未着手）
-
-        //m_grid = new GameObject[m_stageSize.x, m_stageSize.y, m_stageSize.z];
-
-        /*
-        for(int x = 0; x < m_stageSize.x; x++)
+        if (m_fieldRoot == null)
         {
-            for(int y = 0; y < m_stageSize.y; y++)
+            Debug.LogError("FieldRootが設定されていません");
+            yield break;
+        }
+
+        //FieldRoot配下の全オブジェクトを探索
+        foreach (Transform child in m_fieldRoot.GetComponentsInChildren<Transform>(true))
+        {
+            //PlayerSpawner検出
+            if (child.CompareTag("PlayerSpawner"))
             {
-                for(int z = 0; z < m_stageSize.z; z++)
-                {
-                    SpawnBlock(x, y, z, blockType);
-                }
+                SpawnPlayer(child.position);
+            }
+            //EnemySpawner検出
+            else if (child.CompareTag("EnemySpawner"))
+            {
+                SpawnEnemy(child.position);
+            }
+            //EnemyBlock（ターゲット）検出
+            else if (child.CompareTag("Enemy"))
+            {
+                m_enemyBlocks.Add(child.gameObject);
+                m_totalEnemyCount++;
             }
         }
-        */
 
+        Debug.Log($"プレイヤー生成完了 / 敵ターゲット数: {m_totalEnemyCount}");
         yield return null;
+    }
+
+    private void SpawnPlayer(Vector3 position)
+    {
+        if (m_playerPrefab != null)
+        {
+            m_player = Instantiate(m_playerPrefab, position, Quaternion.identity);
+            Debug.Log($"プレイヤーを生成しました 位置: {position}");
+        }
+        else
+        {
+            Debug.LogError("プレイヤープレハブが設定されていません");
+        }
+    }
+
+    private void SpawnEnemy(Vector3 position)
+    {
+        Debug.Log($"敵スポーン位置: {position}");
     }
 
     private void SpawnBlock(int x, int y, int z, string blockType)
@@ -209,42 +262,11 @@ public class StageManager : BaseUpdate, IManageable
     #endregion
 
     #region プレイヤー生成
-    private IEnumerator SpawnPlayer()
-    {
-        if (m_playerPrefab != null)
-        {
-            //プレイヤー生成ブロックの位置を取得？（あとでやる）
-            Vector3 spawnPosition = Vector3.zero;
-
-            m_player = Instantiate(m_playerPrefab, spawnPosition, Quaternion.identity);
-            Debug.Log("プレイヤーを生成しました 位置: " + spawnPosition);
-        }
-        else
-        {
-            Debug.LogError("プレイヤープレハブが設定されていません");
-        }
-
-        yield return null;
-    }
+    //SpawnPlayerはFindSpawnersAndGenerate内で実装
     #endregion
 
     #region 敵生成
-    private IEnumerator SpawnEnemies()
-    {
-        Debug.Log("敵を生成中...");
-
-        //敵の生成をどうするか考え中
-
-        /*
-        if(m_enemyPrefab != null)
-        {
-            Vector3 enemyPosition = new Vector3(1, 2, 3);
-            GameObject enemy = Instantiate(m_enemyPrefab, enemyPosition, Quaternion.identity, transform);
-        }
-        */
-
-        yield return null;
-    }
+    //SpawnEnemyはFindSpawnersAndGenerate内で実装
     #endregion
 
     #region BaseUpdate オーバーライド
@@ -255,7 +277,20 @@ public class StageManager : BaseUpdate, IManageable
 
     public override void Execute()
     {
-        // CheckPlayerFallDeath();
+        //CheckPlayerFallDeath();
+
+        //カウントダウン処理
+        if (m_isCountingDown)
+        {
+            m_countdownTimer -= Time.deltaTime;
+            Debug.Log($"カウントダウン: {m_countdownTimer:F1}秒");
+
+            if (m_countdownTimer <= 0f)
+            {
+                m_isCountingDown = false;
+                CheckDefeatCondition(); //時間切れ後の判定
+            }
+        }
     }
 
     public override void LateExecute()
@@ -282,6 +317,20 @@ public class StageManager : BaseUpdate, IManageable
         return m_currentBombCount;
     }
 
+    public int GetSelectedBombId()
+    {
+        return m_selectedBombId;
+    }
+
+    public void SetSelectedBombId(int bombId)
+    {
+        if (m_bombInventoryDict.ContainsKey(bombId))
+        {
+            m_selectedBombId = bombId;
+            Debug.Log($"爆弾 ID:{bombId} を選択しました");
+        }
+    }
+
     public bool CanPlaceBomb(int bombId)
     {
         if (m_currentBombCount >= MAX_BOMB_COUNT)
@@ -299,22 +348,32 @@ public class StageManager : BaseUpdate, IManageable
         return true;
     }
 
-    public void PlaceBomb(int bombId)
+    public bool PlaceBomb(int bombId, Vector3 position)
     {
-        if (CanPlaceBomb(bombId))
+        if (!CanPlaceBomb(bombId))
         {
-            m_bombInventoryDict[bombId]--;
-            m_currentBombCount++;
-            Debug.Log($"爆弾 ID:{bombId} を設置しました 残り: {m_bombInventoryDict[bombId]}");
+            Debug.LogWarning($"爆弾 ID:{bombId} を設置できません");
+            return false;
         }
+
+        m_bombInventoryDict[bombId]--;
+        m_currentBombCount++;
+        Debug.Log($"爆弾 ID:{bombId} を設置しました 残り: {m_bombInventoryDict[bombId]}");
+
+        CheckBombExhaustion();
+
+        return true;
     }
 
     public void OnBombExploded()
     {
-        m_currentBombCount--;
-        if (m_currentBombCount < 0) m_currentBombCount = 0;
+        if (m_currentBombCount > 0)
+        {
+            m_currentBombCount--;
+        }
 
-        CheckDefeatCondition();
+        //爆弾を使い切ったらカウントダウン開始
+        CheckBombExhaustion();
     }
 
     public BombRow GetBombData(int bombId)
@@ -348,12 +407,15 @@ public class StageManager : BaseUpdate, IManageable
             Debug.Log("ステージクリア！");
             if (GameManager.Instance != null)
             {
-                //GameManager.Instance.ChangeState(new GameClearState(), GameManager.Instance);
+                GameManager.Instance.GameClear();
             }
         }
     }
 
-    private void CheckDefeatCondition()
+    /// <summary>
+    ///爆弾を使い切ったかチェックし、カウントダウン開始
+    /// </summary>
+    private void CheckBombExhaustion()
     {
         bool noBombsLeft = true;
         foreach (var count in m_bombInventoryDict.Values)
@@ -365,16 +427,27 @@ public class StageManager : BaseUpdate, IManageable
             }
         }
 
-        if (noBombsLeft && m_currentBombCount == 0 && m_destroyedEnemyCount < m_totalEnemyCount)
+        //爆弾が残っておらず、設置中の爆弾もない
+        if (noBombsLeft && m_currentBombCount == 0 && !m_isCountingDown)
         {
-            Debug.Log("ゲームオーバー: 爆弾がなくなりました");
+            Debug.Log("爆弾を使い切りました。5秒カウントダウン開始");
+            m_isCountingDown = true;
+            m_countdownTimer = 5f;
+        }
+    }
+
+    private void CheckDefeatCondition()
+    {
+        if (m_destroyedEnemyCount < m_totalEnemyCount)
+        {
+            Debug.Log("ゲームオーバー: 時間内に敵を倒せませんでした");
             OnGameOver();
         }
     }
     #endregion
 
     #region プレイヤー死亡判定
-    public void OnPlayerDaeth()
+    public void OnPlayerDeath()
     {
         Debug.Log("ゲームオーバー: プレイヤーが爆発に巻き込まれました");
         OnGameOver();
@@ -399,7 +472,7 @@ public class StageManager : BaseUpdate, IManageable
     {
         if (GameManager.Instance != null)
         {
-            //GameManager.Instance.ChangeState(new GameOverState(), GameManager.Instance);
+            GameManager.Instance.GameOver();
         }
     }
     #endregion
@@ -438,6 +511,7 @@ public class StageManager : BaseUpdate, IManageable
         Debug.Log($"ステージサイズ: {m_stageSize}");
         Debug.Log($"エネミー: {m_destroyedEnemyCount}/{m_totalEnemyCount}");
         Debug.Log($"設置中の爆弾: {m_currentBombCount}/{MAX_BOMB_COUNT}");
+        Debug.Log($"選択中の爆弾: ID {m_selectedBombId}");
         Debug.Log("爆弾残数:");
         foreach (var kvp in m_bombInventoryDict)
         {

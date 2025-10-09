@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Explosive : MonoBehaviour
 {
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Floor") || other.gameObject.CompareTag("Enemy"))

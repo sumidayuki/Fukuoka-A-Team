@@ -11,6 +11,8 @@ public class Player : IDamageable
 
     public PlayerCamera Cam { get; private set; }
 
+   
+
     // データ由来のパラメータ
     public float MoveSpeed { get; private set; } = 3.0f;
 
@@ -20,13 +22,12 @@ public class Player : IDamageable
     
     public void Enter(PlayerData data = null)
     {
-        if (data != null)
-            MoveSpeed = data.moveSpeed;
-
-        Cam = Camera.main.gameObject.GetComponent<PlayerCamera>();
-
         _stateManager = new StateManager<Player>();
         _stateManager.Init(new PlayerMoveState(), this);
+
+        
+
+        Cam = Camera.main.gameObject.GetComponent<PlayerCamera>();
     }
 
     public void Execute(InputInfo input)
@@ -46,6 +47,8 @@ public class Player : IDamageable
     {
         _stateManager.ChangeState(newState, this);
     }
+
+   
 
     public void Damage(float amount)
     {

@@ -38,6 +38,13 @@ public class PlayerMoveState : StateBase<Player>
             inDir.Normalize();
         }
 
+        // 爆弾設置入力が来たら遷移してこのフレームは終了
+        if (input.Plant)
+        {
+            player.ChangeState(new PlayerPlantState());
+            return;
+        }
+
         // 位置更新(速度はPlayerData由来)
         Vector3 next = rb.position + inDir * player.MoveSpeed * Time.deltaTime;
         rb.MovePosition(next);
@@ -47,12 +54,6 @@ public class PlayerMoveState : StateBase<Player>
         {
             Quaternion target = Quaternion.LookRotation(inDir);
             model.rotation = Quaternion.Slerp(model.rotation, target, turnLerp * Time.deltaTime);
-        }
-
-        // 爆弾設置入力が来たら設置ステートへ
-        if (input.Plant)
-        {
-            player.ChangeState(new PlayerPlantState());
         }
     }
 }

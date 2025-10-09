@@ -15,6 +15,7 @@ public class StageManager : BaseUpdate, IManageable
 
     #region ステージデータ
     [Header("ステージデータ")]
+    [SerializeField] GameObject centerObj;
     private int m_currentStageId = 0;
     private StageRow m_currentStageData;
     private Vector3Int m_stageSize;
@@ -154,9 +155,7 @@ public class StageManager : BaseUpdate, IManageable
         m_bombInventoryDict.Clear();
         m_bombDict.Clear();
 
-        if (m_currentStageData == null) return;
-
-        if (m_currentStageData.bombIds != null && m_currentStageData.bombCounts != null)
+        if (true /*m_currentStageData.bombIds != null && m_currentStageData.bombCounts != null*/)
         {
             int length = Mathf.Min(m_currentStageData.bombIds.Length, m_currentStageData.bombCounts.Length);
 
@@ -173,13 +172,13 @@ public class StageManager : BaseUpdate, IManageable
                 if (data != null && m_bombPrefab != null)
                 {
                     GameObject obj = Instantiate(m_bombPrefab, transform);
-                    obj.SetActive(false); // 初期状態は非アクティブ
 
                     Bomb bomb = obj.GetComponent<Bomb>();
                     if (bomb != null)
                     {
                         bomb.SetBomb(data);
                         m_bombDict[bombId] = bomb;
+                        obj.SetActive(false);
                         Debug.Log($"爆弾 ID:{bombId} Bombインスタンス生成完了");
                     }
                     else
@@ -522,22 +521,25 @@ public class StageManager : BaseUpdate, IManageable
     #region UI管理
     private void InitializeUI()
     {
+        m_stageUI = FindObjectOfType<StageUI>();
 
         if (m_stageUI != null)
         {
-            m_stageUI.CreateBombButtons(m_bombInventoryDict);
+            StartCoroutine(m_stageUI.CreateBombButtons(m_bombInventoryDict));
         }
     }
     #endregion
 
     #region カメラ設定
-    public Vector3 GetStageCenter()
+    public Transform GetStageCenter()
     {
-        return new Vector3(
+        centerObj.transform.position = new Vector3(
             m_stageSize.x / 2f,
             m_stageSize.y / 2f,
             m_stageSize.z / 2f
         );
+
+        return centerObj.transform;
     }
     #endregion
 

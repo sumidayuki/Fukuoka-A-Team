@@ -7,12 +7,11 @@ public class PlayerPlantState : StateBase<Player>
 {
     public override void Enter(Player player)
     {
-        // TODO: 爆弾プレース (StageManagerを経由)
-        // 例: BombPlacer.Place(currentCell, selectedBomb);
+        StageManager.Instance.PlaceBomb(player.PlayerTransform);
     }
 
     public override void Execute(Player player, InputInfo input)
     {
-        player.ChangeState(new PlayerMoveState());
+        //player.ChangeState(new PlayerMoveState());
     }
 }

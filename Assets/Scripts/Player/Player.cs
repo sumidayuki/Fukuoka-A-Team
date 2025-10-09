@@ -7,7 +7,8 @@ public class Player : IDamageable
 {
     // 外部からセットされる参照(PlayerControllerで代入)
     public Rigidbody Rb { get; set; }
-    public Transform Model { get; set; }
+
+    public Transform PlayerTransform { get; set; }
 
     public PlayerCamera Cam { get; private set; }
 
@@ -23,7 +24,8 @@ public class Player : IDamageable
         if (data != null)
             MoveSpeed = data.moveSpeed;
 
-        Cam = Camera.main.gameObject.GetComponent<PlayerCamera>();
+        Cam = Camera.main.gameObject.AddComponent<PlayerCamera>();
+        Cam.SetTarget(StageManager.Instance.GetStageCenter());
 
         _stateManager = new StateManager<Player>();
         _stateManager.Init(new PlayerMoveState(), this);
@@ -33,6 +35,12 @@ public class Player : IDamageable
     {
         if (_isDead) return;
         _stateManager.CurrentState.Execute(this, input);
+    }
+
+    public void FixedExecute(InputInfo input)
+    {
+        if (_isDead) return;
+        _stateManager.CurrentState.FixedExecute(this, input);
     }
 
     public void LateExecute(InputInfo input)

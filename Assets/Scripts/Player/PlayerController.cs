@@ -6,7 +6,6 @@ public class PlayerController : BaseUpdate
 {
     [Header("=== Player Components ===")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private Transform model;
 
     [Header("=== Player Settings ===")]
     [SerializeField] private PlayerData playerData;
@@ -27,14 +26,19 @@ public class PlayerController : BaseUpdate
     {
         input = InputManager.Instance.Info;
         player = new Player();
-        player.Rb = rb;
-        player.Model = model;
+        player.Rb = GetComponent<Rigidbody>();
+        player.PlayerTransform = this.gameObject.transform;
         player.Enter(playerData);
     }
 
     public override void Execute()
     {
         player.Execute(input);
+    }
+
+    public override void FixedExecute()
+    {
+        player.FixedExecute(input);
     }
 
     public override void LateExecute()

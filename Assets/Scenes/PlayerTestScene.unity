@@ -648,7 +648,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.30370617, y: -1, z: 2.9526534}
-  m_LocalScale: {x: 100, y: 1, z: 100}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -759,7 +759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 516164702}
-  offset: {x: 0, y: 5, z: -5}
+  offset: {x: 0, y: 1, z: -10}
   followSpeed: 10
   rotateSpeed: 3
 --- !u!1 &1927943487

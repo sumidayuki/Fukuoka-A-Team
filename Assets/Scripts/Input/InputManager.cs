@@ -68,7 +68,7 @@ public class InputManager : MonoBehaviour
 
     private void InputClear()
     {
-        Info.RightClick = false;
+        Info.LeftClick = false;
         Info.Plant = false;
     }
 }

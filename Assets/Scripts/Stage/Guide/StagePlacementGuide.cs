@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,7 +11,6 @@ using UnityEditor;
 [ExecuteAlways] // エディタ上でも動作
 public class StagePlacementGuide : MonoBehaviour
 {
-    [SerializeField] int stageID = 0;
     [SerializeField] StageData stageData;
 
     private Vector3 m_cellSize = new Vector3(2, 2, 2);
@@ -21,9 +22,14 @@ public class StagePlacementGuide : MonoBehaviour
         if (stageData == null || stageData.rows == null) return;
 
         StageRow row = null;
+
+        string sceneName = SceneManager.GetActiveScene().name;  // "Stage_0"
+        string[] parts = sceneName.Split('_');                  // ["Stage", "0"]
+        int stageId = int.Parse(parts[1]);
+
         foreach (var r in stageData.rows)
         {
-            if (r.id == stageID)
+            if (r.id == stageId)
             {
                 row = r;
                 break;

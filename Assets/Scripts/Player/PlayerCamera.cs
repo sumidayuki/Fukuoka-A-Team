@@ -5,37 +5,21 @@ using UnityEngine;
 public class PlayerCamera : BaseUpdate
 {
     [SerializeField] private Transform target;
-    [SerializeField] private Vector3 offset = new Vector3(0, 5, -5);
+    [SerializeField] private Vector3 offset = new Vector3(0, 1, -10);
     [SerializeField] private float followSpeed = 10f;
     [SerializeField] private float rotateSpeed = 3f;
 
     private float yaw = 0f;
     private float pitch = 20f;
 
-    private void OnEnable()
-    {
-        if (GameManager.Instance != null)
-            GameManager.Instance.RegisterSystem(this);
-    }
-
-    private void OnDisable()
-    {
-        if (GameManager.Instance != null)
-            GameManager.Instance.UnregisterSystem(this);
-    }
-
-    public override void Enter()
-    {
-        
-    }
-
-    public override void Execute()
+    
+    public void CameraUpdate(InputInfo input)
     {
         if (target == null) return;
 
-        if (Input.GetMouseButton(1))
+        if (input.RightClick)
         {
-            float mouseX = Input.GetAxis("Mouse X");
+            float mouseX = input.Look.x;
             yaw += mouseX * rotateSpeed;
         }
 

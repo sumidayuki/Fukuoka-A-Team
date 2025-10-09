@@ -36,4 +36,9 @@ public class PlayerController : BaseUpdate
     {
         player.Execute(input);
     }
+
+    public override void LateExecute()
+    {
+        player.LateExecute(input);
+    }
 }

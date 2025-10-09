@@ -22,6 +22,14 @@ public class Bomb : MonoBehaviour
     [SerializeField] Transform m_explosiveTransform;
     [SerializeField] GameObject m_explosivePrefab;
 
+    private void OnDisable()
+    {
+       if(StageManager.Instance != null)
+        {
+            StageManager.Instance.OnBombExploded(this);
+        }
+    }
+
     public void Explode()
     {
         m_bombPrefab.SetActive(false);

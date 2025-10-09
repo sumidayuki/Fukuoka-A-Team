@@ -46,15 +46,15 @@ public class StageManager : BaseUpdate, IManageable
     [SerializeField] private GameObject m_enemyPrefab;
     private GameObject m_player;
     #endregion
-    /*
+    
     #region UI管理
     [Header("UI管理")]
-    [SerializeField] private StageUI m_stageUI;
+    private StageUI m_stageUI;
     #endregion
-    */
+    
     #region カメラ設定
     [Header("カメラ設定")]
-    [SerializeField] private Transform m_cameraPivot;
+    private Transform m_cameraPivot;
     #endregion
 
     #region 落下死判定
@@ -100,8 +100,7 @@ public class StageManager : BaseUpdate, IManageable
         yield return StartCoroutine(LoadStageData());
         yield return StartCoroutine(FindSpawnersAndGenerate());
 
-        SetupCameraPivot();
-        //InitializeUI();
+        InitializeUI();
 
         Debug.Log("StageManager: ロード完了");
         yield return null;
@@ -307,6 +306,7 @@ public class StageManager : BaseUpdate, IManageable
     #endregion
 
     #region 爆弾管理API
+
     public int GetBombCount(int bombId)
     {
         if (m_bombInventoryDict.ContainsKey(bombId))
@@ -332,7 +332,6 @@ public class StageManager : BaseUpdate, IManageable
         {
             m_selectedBombId = bombId;
             Debug.Log($"爆弾 ID:{bombId} を選択しました");
-            //UpdateUI();
         }
     }
 
@@ -359,8 +358,10 @@ public class StageManager : BaseUpdate, IManageable
         return true;
     }
 
-    public bool PlaceBomb(int bombId, Vector3 position)
+    public bool PlaceBomb(Transform playerTransform)
     {
+        int bombId = m_selectedBombId;
+
         if (!CanPlaceBomb(bombId))
         {
             Debug.LogWarning($"爆弾 ID:{bombId} を設置できません");
@@ -370,16 +371,14 @@ public class StageManager : BaseUpdate, IManageable
         Bomb bomb = m_bombDict[bombId];
 
         // 爆弾を配置
-        bomb.transform.position = position;
         bomb.gameObject.SetActive(true);
-        bomb.Plant(transform); // 爆弾の設置処理を呼ぶ
+        bomb.Plant(playerTransform); // 爆弾の設置処理を呼ぶ
 
         m_bombInventoryDict[bombId]--;
         m_currentBombCount++;
 
-        Debug.Log($"爆弾 ID:{bombId} を設置しました 位置:{position} 残り: {m_bombInventoryDict[bombId]}");
+        Debug.Log($"爆弾 ID:{bombId} を設置しました 位置:{playerTransform.position} 残り: {m_bombInventoryDict[bombId]}");
 
-        //UpdateUI();
         CheckBombExhaustion();
 
         return true;
@@ -519,42 +518,19 @@ public class StageManager : BaseUpdate, IManageable
         }
     }
     #endregion
-    /*
+    
     #region UI管理
     private void InitializeUI()
     {
-        if (m_stageUI != null)
-        {
-            m_stageUI.Initialize(this);
-        }
-        UpdateUI();
-    }
 
-    private void UpdateUI()
-    {
         if (m_stageUI != null)
         {
-            m_stageUI.UpdateDisplay();
+            m_stageUI.CreateBombButtons(m_bombInventoryDict);
         }
     }
     #endregion
-*/
+
     #region カメラ設定
-    private void SetupCameraPivot()
-    {
-        if (m_cameraPivot != null)
-        {
-            Vector3 stageCenter = new Vector3(
-                m_stageSize.x / 2f,
-                m_stageSize.y / 2f,
-                m_stageSize.z / 2f
-            );
-
-            m_cameraPivot.position = stageCenter;
-            Debug.Log($"カメラピボットをステージ中心に設定: {stageCenter}");
-        }
-    }
-
     public Vector3 GetStageCenter()
     {
         return new Vector3(

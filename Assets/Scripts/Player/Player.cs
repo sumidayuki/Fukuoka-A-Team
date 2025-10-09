@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class Player : IDamageable
+public class Player : MonoBehaviour, IDamageable
 {
-    // 外部からセットされる参照(PlayerControllerで代入)
-    public Rigidbody Rb { get; set; }
+    public Rigidbody Rb { get; private set; }
 
-    public Transform PlayerTransform { get; set; }
+    public Transform PlayerTransform { get; private set; }
+
+    public Animator Anim { get; private set; }
 
     public PlayerCamera Cam { get; private set; }
 
@@ -19,10 +20,15 @@ public class Player : IDamageable
     private bool _isDead = false;
     private StateManager<Player> _stateManager;
     
-    public void Enter(PlayerData data = null)
+    public void Enter()
     {
-        if (data != null)
-            MoveSpeed = data.moveSpeed;
+        MoveSpeed = DataManager.Instance.GetPlayerData().moveSpeed;
+
+        Rb = gameObject.GetComponent<Rigidbody>();
+
+        PlayerTransform = gameObject.transform;
+
+        Anim = gameObject.GetComponent<Animator>();
 
         Cam = Camera.main.gameObject.AddComponent<PlayerCamera>();
         Cam.SetTarget(StageManager.Instance.GetStageCenter());
@@ -61,6 +67,16 @@ public class Player : IDamageable
 
         _isDead = true;
         ChangeState(new PlayerDeadState());
+    }
+
+    /// <summary>
+    /// AnimatorについているSMBを取得します。
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public T GetBehaviour<T>() where T : StateMachineBehaviour
+    {
+        return Anim.GetBehaviour<T>();
     }
 
 }

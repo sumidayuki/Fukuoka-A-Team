@@ -9,14 +9,12 @@ public class Explosive : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Floor") || other.gameObject.CompareTag("Enemy"))
         {
-            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+            IDamageable damageable = other.gameObject.GetComponentInParent<IDamageable>();
 
             if (damageable != null)
             {
                 damageable.Damage(1);
             }
         }
-
-        List<Dictionary<int, GameObject>> a;
     }
 }

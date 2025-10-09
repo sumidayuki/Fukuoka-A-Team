@@ -15,7 +15,7 @@ public class StageManager : BaseUpdate, IManageable
 
     #region ステージデータ
     [Header("ステージデータ")]
-    [SerializeField] GameObject centerObj;
+    [SerializeField] GameObject m_centerObj;
     private int m_currentStageId = 0;
     private StageRow m_currentStageData;
     private Vector3Int m_stageSize;
@@ -27,7 +27,7 @@ public class StageManager : BaseUpdate, IManageable
     private Dictionary<int, int> m_bombInventoryDict = new Dictionary<int, int>();
     private Dictionary<int, GameObject> m_bombObjectDict = new Dictionary<int, GameObject>();
 
-    private Dictionary<int, Bomb> m_bombDict = new Dictionary<int, Bomb>();
+    private Dictionary<int, Queue<Bomb>> m_bombDict = new Dictionary<int, Queue<Bomb>>();
 
     private int m_currentBombCount = 0;
     private const int MAX_BOMB_COUNT = 3;
@@ -52,9 +52,10 @@ public class StageManager : BaseUpdate, IManageable
     [Header("UI管理")]
     private StageUI m_stageUI;
     #endregion
-    
+
     #region カメラ設定
     [Header("カメラ設定")]
+    private Vector3 m_cameraOffset;
     private Transform m_cameraPivot;
     #endregion
 
@@ -101,6 +102,7 @@ public class StageManager : BaseUpdate, IManageable
         yield return StartCoroutine(LoadStageData());
         yield return StartCoroutine(FindSpawnersAndGenerate());
 
+        InitializeCamera();
         InitializeUI();
 
         Debug.Log("StageManager: ロード完了");
@@ -166,25 +168,30 @@ public class StageManager : BaseUpdate, IManageable
 
                 // 残数を登録
                 m_bombInventoryDict[bombId] = count;
+                m_bombDict[bombId] = new Queue<Bomb>();
+
+                BombRow data = DataManager.Instance.GetBomb(bombId);
 
                 // BombRowを取得してBombインスタンスを生成
-                BombRow data = DataManager.Instance.GetBomb(bombId);
-                if (data != null && m_bombPrefab != null)
+                for (int j = 0; j < count; j++)
                 {
-                    GameObject obj = Instantiate(m_bombPrefab, transform);
+                    if (data != null && m_bombPrefab != null)
+                    {
+                        GameObject obj = Instantiate(m_bombPrefab, transform);
 
-                    Bomb bomb = obj.GetComponent<Bomb>();
-                    if (bomb != null)
-                    {
-                        bomb.SetBomb(data);
-                        m_bombDict[bombId] = bomb;
-                        obj.SetActive(false);
-                        Debug.Log($"爆弾 ID:{bombId} Bombインスタンス生成完了");
-                    }
-                    else
-                    {
-                        Debug.LogError($"BombプレハブにBombコンポーネントがありません");
-                        Destroy(obj);
+                        Bomb bomb = obj.GetComponent<Bomb>();
+                        if (bomb != null)
+                        {
+                            bomb.SetBomb(data);
+                            obj.SetActive(false);
+                            m_bombDict[bombId].Enqueue(bomb);
+                            Debug.Log($"爆弾 ID:{bombId} Bombインスタンス生成完了");
+                        }
+                        else
+                        {
+                            Debug.LogError($"BombプレハブにBombコンポーネントがありません");
+                            Destroy(obj);
+                        }
                     }
                 }
 
@@ -367,7 +374,7 @@ public class StageManager : BaseUpdate, IManageable
             return false;
         }
 
-        Bomb bomb = m_bombDict[bombId];
+        Bomb bomb = m_bombDict[bombId].Dequeue();
 
         // 爆弾を配置
         bomb.gameObject.SetActive(true);
@@ -377,6 +384,8 @@ public class StageManager : BaseUpdate, IManageable
         m_currentBombCount++;
 
         Debug.Log($"爆弾 ID:{bombId} を設置しました 位置:{playerTransform.position} 残り: {m_bombInventoryDict[bombId]}");
+
+        m_stageUI.UpdateBombButtonState(m_bombInventoryDict, bombId);
 
         CheckBombExhaustion();
 
@@ -531,16 +540,23 @@ public class StageManager : BaseUpdate, IManageable
     #endregion
 
     #region カメラ設定
+    public void InitializeCamera()
+    {
+        m_centerObj.transform.position = new Vector3(m_stageSize.x / 2f * 2 - 0.5f, m_stageSize.y / 2f * 2 -0.5f, m_stageSize.z / 2f * 2 - 0.5f);
+
+        m_cameraOffset = new Vector3(0, m_stageSize.y / 2.0f, -(m_stageSize.z / 2.0f * 2 * 4));
+    }
+
     public Transform GetStageCenter()
     {
-        centerObj.transform.position = new Vector3(
-            m_stageSize.x / 2f,
-            m_stageSize.y / 2f,
-            m_stageSize.z / 2f
-        );
-
-        return centerObj.transform;
+        return m_centerObj.transform;
     }
+
+    public Vector3 GetCameraOffset()
+    {
+        return m_cameraOffset;
+    }
+
     #endregion
 
     #region デバッグ用

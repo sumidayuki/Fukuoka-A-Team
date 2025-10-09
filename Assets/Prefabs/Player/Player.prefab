@@ -1309,6 +1309,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7245010165504999930}
+  - component: {fileID: 3401316177956827392}
   m_Layer: 0
   m_Name: Main_mesh_group
   m_TagString: Untagged
@@ -1336,6 +1337,27 @@ Transform:
   - {fileID: 7675092725859114461}
   m_Father: {fileID: 4506041212936374439}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3401316177956827392
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5134292456764698993}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6, y: 1.6, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0.1}
 --- !u!1 &5280967783064745247
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,7 +1400,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4506041212936374439}
   - component: {fileID: 6901503903824799802}
-  - component: {fileID: 6982114045087817200}
   - component: {fileID: 5300780650699105754}
   - component: {fileID: 1016949778210665537}
   m_Layer: 0
@@ -1429,27 +1450,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!65 &6982114045087817200
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5385373220313426941}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1.5, z: 1}
-  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!54 &5300780650699105754
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1489,8 +1489,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9656b32b8fddda94889b224abfecad33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  playerData: {fileID: 0}
 --- !u!1 &5744500071636300328
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,5 +16,7 @@ public class Explosive : MonoBehaviour
                 damageable.Damage(1);
             }
         }
+
+        List<Dictionary<int, GameObject>> a;
     }
 }

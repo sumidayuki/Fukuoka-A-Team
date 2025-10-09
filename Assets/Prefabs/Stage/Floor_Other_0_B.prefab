@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6347100671072839383}
-  m_Layer: 8
-  m_Name: Floor_Other_0
+  m_Layer: 7
+  m_Name: Floor_Other_0_B
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5183463947859692747}
   - component: {fileID: 2992523348141426979}
   - component: {fileID: 8159938657880467649}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: polySurface191
   m_TagString: Untagged
   m_Icon: {fileID: 0}

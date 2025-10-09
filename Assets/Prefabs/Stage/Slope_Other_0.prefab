@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6787636894951808699}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slope_Other_0
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8304520433698953295}
   - component: {fileID: 6534628828423057990}
   - component: {fileID: 2752929776241291426}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: polySurface200
   m_TagString: Untagged
   m_Icon: {fileID: 0}

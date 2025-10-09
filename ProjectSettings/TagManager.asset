@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - EnemySpawner
   - PlayerSpawner
+  - Explosive
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - 
   - Destructive
   - Non-Destructive
-  - 
+  - Explosive
   - 
   - 
   - 

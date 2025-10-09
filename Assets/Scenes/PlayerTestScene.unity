@@ -196,7 +196,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1757832350}
 --- !u!1 &516164699
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,6 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 516164701}
   model: {fileID: 698986082}
+  playerData: {fileID: 0}
 --- !u!54 &516164701
 Rigidbody:
   m_ObjectHideFlags: 0

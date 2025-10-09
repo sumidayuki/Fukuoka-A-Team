@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class PlayerController : BaseUpdate
 {
+    [Header("=== Player Components ===")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform model;
 
+    [Header("=== Player Settings ===")]
+    [SerializeField] private PlayerData playerData;
+
     private Player player;
-    private InputInfo input = new InputInfo();
+    private InputInfo input;
 
     private void Start()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.RegisterSystem(this);
+        GameManager.Instance.RegisterSystem(this);
     }
     private void OnDisable()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.UnregisterSystem(this);
+        GameManager.Instance.UnregisterSystem(this);
     }
 
     public override void Enter()
@@ -27,7 +29,7 @@ public class PlayerController : BaseUpdate
         player = new Player();
         player.Rb = rb;
         player.Model = model;
-        player.Enter();
+        player.Enter(playerData);
     }
 
     public override void Execute()

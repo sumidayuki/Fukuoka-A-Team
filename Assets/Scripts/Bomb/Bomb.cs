@@ -76,8 +76,10 @@ public class Bomb : MonoBehaviour
         }
     }
 
-    public void Plant()
+    public void Plant(Transform transform)
     {
+        gameObject.transform.position = transform.position;
+        gameObject.transform.rotation = transform.rotation;
         gameObject.SetActive(true);
         m_bombPrefab.gameObject.SetActive(true);
         m_explosiveTransform.gameObject.SetActive(false);

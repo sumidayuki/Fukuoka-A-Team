@@ -2,27 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player
+public class Player : IDamageable
 {
+    // 外部からセットされる参照(PlayerControllerで代入)
     public Rigidbody Rb { get; set; }
     public Transform Model { get; set; }
 
-    private StateManager<Player> stateManager;
+    // データ由来のパラメータ
+    public float MoveSpeed { get; private set; } = 3.0f;
+
+    // 内部状態
+    private bool _isDead = false;
+    private StateManager<Player> _stateManager;
     
-    public void Enter()
+    public void Enter(PlayerData data = null)
     {
-        stateManager = new StateManager<Player>();
-        stateManager.Init(new PlayerMoveState(), this);
+        if (data != null)
+            MoveSpeed = data.moveSpeed;
+
+        _stateManager = new StateManager<Player>();
+        _stateManager.Init(new PlayerMoveState(), this);
     }
 
     public void Execute(InputInfo input)
     {
-        stateManager.CurrentState.Execute(this, input);
+        if (_isDead) return;
+        _stateManager.CurrentState.Execute(this, input);
     }
 
     public void ChangeState(StateBase<Player> newState)
     {
-        stateManager.ChangeState(newState, this);
+        _stateManager.ChangeState(newState, this);
+    }
+
+    public void Damage(float amount)
+    {
+        if (_isDead) return;
+
+        _isDead = true;
+        ChangeState(new PlayerDeadState());
     }
 
 }

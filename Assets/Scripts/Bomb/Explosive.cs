@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Explosive : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Floor") || collision.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Floor") || other.gameObject.CompareTag("Enemy"))
         {
-            IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
 
-            if(damageable != null)
+            if (damageable != null)
             {
                 damageable.Damage(1);
             }

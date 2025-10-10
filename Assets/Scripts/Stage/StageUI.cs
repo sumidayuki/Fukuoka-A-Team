@@ -7,10 +7,13 @@ public class StageUI : MonoBehaviour
 {
     [SerializeField] private Transform m_bombButtonParent;
     [SerializeField] private GameObject m_bombButtonPrefab;
+    [SerializeField] private GameObject m_gameOverPanel;
     private Dictionary<int, Button> m_bombButtonDict = new Dictionary<int, Button>();
 
     public IEnumerator CreateBombButtons(Dictionary<int, int> bombInventory)
     {
+        m_gameOverPanel.SetActive(false);
+
         // ä˘ë∂É{É^ÉìçÌèú
         foreach (Transform child in m_bombButtonParent)
         {
@@ -57,6 +60,11 @@ public class StageUI : MonoBehaviour
         HighlightButton(selectedId);
     }
 
+    public void LoadTo(string name)
+    {
+        GameManager.Instance.LoadTo(name);
+    }
+
     public void SelectBomb(int bombId)
     {
         StageManager.Instance.SetSelectedBombId(bombId);
@@ -70,5 +78,15 @@ public class StageUI : MonoBehaviour
             Color c = (button.Key == selectedId) ? Color.yellow : Color.white;
             button.Value.image.color = c;
         }
+    }
+
+    public void HideButtons()
+    {
+        m_bombButtonParent.gameObject.SetActive(false);
+    }
+
+    public void ShowGameOverPanel()
+    {
+        m_gameOverPanel.SetActive(true);
     }
 }

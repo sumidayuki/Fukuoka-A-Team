@@ -67,5 +67,6 @@ public class PlayerMoveState : StateBase<Player>
 
     public override void Exit(Player player)
     {
+        player.Anim.ResetTrigger("Walk");
     }
 }

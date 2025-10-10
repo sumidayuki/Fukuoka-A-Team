@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GameOverState : StateBase<GameManager>
 {
-    public override void Enter(GameManager gm)
-    {
-        
-    }
+
+
 }

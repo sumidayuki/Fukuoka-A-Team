@@ -94,6 +94,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void GameOver()
+    {
+        ChangeState(new GameOverState(), this);
+    }
+
     /// <summary>
     /// BaseUpdate ‚ğŒp³‚µ‚Ä‚¢‚éƒNƒ‰ƒX‚ğ“o˜^‚µ‚Ü‚·B
     /// “o˜^‚ğ‚·‚é‚±‚Æ‚Å BaseUpdate ‚©‚çXV‚È‚Ç‚Ìˆ—‚ªŒÄ‚Ño‚³‚ê‚Ü‚·B
@@ -114,16 +119,6 @@ public class GameManager : MonoBehaviour
     public void UnregisterSystem(BaseUpdate system)
     {
         BaseUpdates.Remove(system);
-    }
-
-    public void GameClear()
-    {
-
-    }
-
-    public void GameOver()
-    {
-
     }
 
     private void FindLoadTarget()

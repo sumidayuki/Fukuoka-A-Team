@@ -296,6 +296,8 @@ public class StageManager : BaseUpdate, IManageable
 
             if (m_countdownTimer <= 0f)
             {
+                OnGameOver();
+
                 m_isCountingDown = false;
                 CheckDefeatCondition();
             }
@@ -442,10 +444,9 @@ public class StageManager : BaseUpdate, IManageable
             m_isCountingDown = false;
             Debug.Log("ステージクリア！");
 
-            if (GameManager.Instance != null)
-            {
-                // GameManager.Instance.ChangeState(new GameClearState(), GameManager.Instance);
-            }
+            DataManager.Instance.GetPlayerData().unlockedStageCount++;
+
+            m_stageUI.HideButtons();
         }
     }
 
@@ -518,12 +519,12 @@ public class StageManager : BaseUpdate, IManageable
 
     private void OnGameOver()
     {
+        m_stageUI.HideButtons();
+        m_stageUI.ShowGameOverPanel();
+
         m_isCountingDown = false;
 
-        if (GameManager.Instance != null)
-        {
-            // GameManager.Instance.ChangeState(new GameOverState(), GameManager.Instance);
-        }
+        GameManager.Instance.GameOver();
     }
     #endregion
     
@@ -535,6 +536,7 @@ public class StageManager : BaseUpdate, IManageable
         if (m_stageUI != null)
         {
             StartCoroutine(m_stageUI.CreateBombButtons(m_bombInventoryDict));
+            m_stageUI.UpdateBombButtonState(m_bombInventoryDict, m_selectedBombId);
         }
     }
     #endregion

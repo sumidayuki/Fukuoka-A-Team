@@ -7,8 +7,11 @@ public class StageUI : MonoBehaviour
 {
     [SerializeField] private Transform m_bombButtonParent;
     [SerializeField] private GameObject m_bombButtonPrefab;
+    [SerializeField] private Image m_bombUI;
     [SerializeField] private GameObject m_gameOverPanel;
     private Dictionary<int, Button> m_bombButtonDict = new Dictionary<int, Button>();
+
+    private const int CellSize = 25;
 
     public IEnumerator CreateBombButtons(Dictionary<int, int> bombInventory)
     {
@@ -28,9 +31,30 @@ public class StageUI : MonoBehaviour
             int bombId = bomb.Key;
             int count = bomb.Value;
 
+            BombRow bombRow = DataManager.Instance.GetBomb(bombId);
+
             GameObject btnObj = Instantiate(m_bombButtonPrefab, m_bombButtonParent);
             Button btn = btnObj.GetComponent<Button>();
             Text txt = btnObj.GetComponentInChildren<Text>();
+
+            Image imageParent = btnObj.GetComponentInChildren<Image>();
+            for(int x = 0; x < bombRow.x.Length; x++)
+            {
+                for(int i = 0; i < bombRow.x[x]; i++)
+                {
+                    Vector3 dir = x == 0 ? Vector3.left : Vector3.right;
+                    Instantiate(m_bombUI, imageParent.transform.position + (i + 1) * dir * CellSize, Quaternion.identity, imageParent.transform);
+                }
+            }
+            for (int y = 0; y < bombRow.z.Length; y++)
+            {
+                for (int i = 0; i < bombRow.z[y]; i++)
+                {
+                    Vector3 dir = y == 0 ? Vector3.up : Vector3.down;
+                    Instantiate(m_bombUI, imageParent.transform.position + (i + 1) * dir * CellSize, Quaternion.identity, imageParent.transform);
+                }
+            }
+
             txt.text = $"Žc‚è:{count}";
             btn.interactable = count > 0;
 

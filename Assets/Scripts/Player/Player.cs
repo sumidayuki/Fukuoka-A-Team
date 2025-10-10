@@ -14,7 +14,7 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerCamera Cam { get; private set; }
 
     // データ由来のパラメータ
-    public float MoveSpeed { get; private set; } = 3.0f;
+    public float MoveSpeed { get; private set; }
 
     // 内部状態
     private bool _isDead = false;

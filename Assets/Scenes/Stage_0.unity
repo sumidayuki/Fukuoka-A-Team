@@ -8991,6 +8991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_bombButtonParent: {fileID: 1122395272}
   m_bombButtonPrefab: {fileID: 3322580938703894904, guid: 3bf82b11c242b724aa4c2d00c6742c6a, type: 3}
+  m_bombUI: {fileID: 5931663062412355474, guid: d2857fd8ee5fea749bef9d012e787848, type: 3}
   m_gameOverPanel: {fileID: 983413744}
 --- !u!114 &1324860238
 MonoBehaviour:

@@ -41,7 +41,11 @@ public class PlayerMoveState : StateBase<Player>
     public override void FixedExecute(Player player, InputInfo input)
     {
         Vector3 inDir = input.Move;
-        if (inDir.sqrMagnitude < 0.0001f) return;
+        if (inDir.sqrMagnitude < 0.0001f)
+        {
+            player.Anim.SetFloat("Speed", 0);
+            return;
+        }
         inDir.Normalize();
 
         // ƒJƒƒ‰Šî€‚Å…•½ˆÚ“®
@@ -63,6 +67,19 @@ public class PlayerMoveState : StateBase<Player>
             Quaternion target = Quaternion.LookRotation(inDir);
             player.PlayerTransform.rotation = Quaternion.Slerp(player.PlayerTransform.rotation, target, turnLerp * Time.deltaTime);
         }
+
+        float currentSpeed = 0;
+
+        if (Mathf.Abs(input.Move.x) != 0 || Mathf.Abs(input.Move.z) != 0)
+        {
+            currentSpeed = 1;
+        }
+        else
+        {
+            currentSpeed = 0;
+        }
+
+        player.Anim.SetFloat("Speed", input.Move.magnitude * currentSpeed);
     }
 
     public override void Exit(Player player)

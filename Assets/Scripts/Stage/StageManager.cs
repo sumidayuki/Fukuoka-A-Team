@@ -281,9 +281,15 @@ public class StageManager : BaseUpdate, IManageable
     #endregion
 
     #region BaseUpdate オーバーライド
+    [SerializeField] private AudioClip stageBGM;
+
     public override void Enter()
     {
         Debug.Log("StageManager: Enter");
+
+        if (stageBGM != null)
+            SoundManager.Instance.PlayBGM(stageBGM, true);
+            
     }
 
     public override void Execute()

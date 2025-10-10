@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
+using UnityEditor;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
@@ -20,6 +22,13 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject m_bombPrefab;
     [SerializeField] Transform m_explosiveTransform;
     [SerializeField] GameObject m_explosivePrefab;
+    [SerializeField] private AudioClip plantSE;
+    [SerializeField] private AudioClip tickSE;
+    [SerializeField] private AudioClip explodeSE;
+
+    [SerializeField, Range(0.05f, 1f)]
+    private float tickInterval = 0.25f;
+    private float tickTimer;
 
     private void OnDisable()
     {
@@ -31,6 +40,8 @@ public class Bomb : MonoBehaviour
 
     public void Explode()
     {
+        if (SoundManager.Instance != null && explodeSE != null)
+            SoundManager.Instance.PlaySE(explodeSE);
         m_bombPrefab.SetActive(false);
         m_explosiveTransform.gameObject.SetActive(true);
         Destroy(this.gameObject, 0.5f);
@@ -76,6 +87,14 @@ public class Bomb : MonoBehaviour
         {
             m_myBomb.time -= Time.deltaTime;
 
+            tickTimer -= Time.deltaTime;
+            if (tickTimer <= 0f)
+            {
+                if (SoundManager.Instance != null && tickSE != null)
+                    SoundManager.Instance.PlaySE(tickSE);
+                tickTimer = tickInterval;
+            }
+                
             if(m_myBomb.time < 0)
             {
                 Explode();
@@ -86,15 +105,14 @@ public class Bomb : MonoBehaviour
     public void Plant(Transform transform)
     {
         gameObject.transform.position = transform.position;
-
-        // 回転を90度ごとにスナップ
-        Quaternion rot = transform.rotation;
-        Vector3 euler = rot.eulerAngles;
-        euler.y = Mathf.Round(euler.y / 90.0f) * 90.0f;
-        gameObject.transform.rotation = Quaternion.Euler(euler);
-
+        gameObject.transform.rotation = transform.rotation;
         m_bombPrefab.gameObject.SetActive(true);
         m_explosiveTransform.gameObject.SetActive(false);
+
+        if (SoundManager.Instance != null && plantSE != null)
+            SoundManager.Instance.PlaySE(plantSE);
+
+        tickTimer = tickInterval;
     }
 
     public void SetBomb(BombRow data)
@@ -102,7 +120,7 @@ public class Bomb : MonoBehaviour
         m_myBomb.left = data.x[0];
         m_myBomb.right = data.x[1];
         m_myBomb.up = data.y[0];
-        m_myBomb.down = 0;
+        m_myBomb.down = data.y[1];
         m_myBomb.forward = data.z[0];
         m_myBomb.back = data.z[1];
         m_myBomb.time = 3.0f;

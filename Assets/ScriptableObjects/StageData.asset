@@ -17,7 +17,7 @@ MonoBehaviour:
     name: Tutorial
     size: 040000000400000004000000
     bombIds: 0000000001000000
-    bombCounts: 0300000003000000
+    bombCounts: 0500000003000000
     bgm: 
   - id: 1
     name: 

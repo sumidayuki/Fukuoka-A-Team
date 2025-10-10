@@ -269,6 +269,8 @@ public class StageManager : BaseUpdate, IManageable
         if (m_enemyPrefab != null)
         {
             GameObject enemy = Instantiate(m_enemyPrefab, position, Quaternion.identity);
+            m_enemyBlocks.Add(enemy);
+            m_totalEnemyCount++;
             Debug.Log($"敵を生成しました 位置: {position}");
         }
         else
@@ -442,6 +444,9 @@ public class StageManager : BaseUpdate, IManageable
         {
             m_isCountingDown = false;
             Debug.Log("ステージクリア！");
+
+            m_stageUI.ShowGameClearPanel();
+            GameManager.Instance.GameOver();
 
             DataManager.Instance.GetPlayerData().unlockedStageCount++;
 

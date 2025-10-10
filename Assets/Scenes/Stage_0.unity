@@ -8914,6 +8914,7 @@ MonoBehaviour:
   m_bombButtonPrefab: {fileID: 3322580938703894904, guid: 3bf82b11c242b724aa4c2d00c6742c6a, type: 3}
   m_bombUI: {fileID: 5931663062412355474, guid: d2857fd8ee5fea749bef9d012e787848, type: 3}
   m_gameOverPanel: {fileID: 983413744}
+  m_gameClearPanel: {fileID: 1542821941}
 --- !u!114 &1324860238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10415,7 +10416,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 1000, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1542821943
 MonoBehaviour:
@@ -10430,7 +10431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.65882355}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

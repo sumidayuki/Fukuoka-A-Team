@@ -9,6 +9,7 @@ public class StageUI : MonoBehaviour
     [SerializeField] private GameObject m_bombButtonPrefab;
     [SerializeField] private Image m_bombUI;
     [SerializeField] private GameObject m_gameOverPanel;
+    [SerializeField] private GameObject m_gameClearPanel;
     private Dictionary<int, Button> m_bombButtonDict = new Dictionary<int, Button>();
 
     private const int CellSize = 25;
@@ -112,5 +113,10 @@ public class StageUI : MonoBehaviour
     public void ShowGameOverPanel()
     {
         m_gameOverPanel.SetActive(true);
+    }
+
+    public void ShowGameClearPanel()
+    {
+        m_gameClearPanel.SetActive(true);
     }
 }

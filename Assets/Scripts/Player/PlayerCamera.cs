@@ -20,6 +20,9 @@ public class PlayerCamera : BaseUpdate
         {
             float mouseX = input.Look.x;
             yaw += mouseX * rotateSpeed / 10;
+
+            float mouseY = input.Look.y;
+            pitch = Mathf.Clamp(pitch - mouseY, -10, 20);
         }
 
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);

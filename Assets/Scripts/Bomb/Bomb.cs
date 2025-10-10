@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
@@ -87,7 +86,13 @@ public class Bomb : MonoBehaviour
     public void Plant(Transform transform)
     {
         gameObject.transform.position = transform.position;
-        gameObject.transform.rotation = transform.rotation;
+
+        // 回転を90度ごとにスナップ
+        Quaternion rot = transform.rotation;
+        Vector3 euler = rot.eulerAngles;
+        euler.y = Mathf.Round(euler.y / 90.0f) * 90.0f;
+        gameObject.transform.rotation = Quaternion.Euler(euler);
+
         m_bombPrefab.gameObject.SetActive(true);
         m_explosiveTransform.gameObject.SetActive(false);
     }
@@ -97,7 +102,7 @@ public class Bomb : MonoBehaviour
         m_myBomb.left = data.x[0];
         m_myBomb.right = data.x[1];
         m_myBomb.up = data.y[0];
-        m_myBomb.down = data.y[1];
+        m_myBomb.down = 0;
         m_myBomb.forward = data.z[0];
         m_myBomb.back = data.z[1];
         m_myBomb.time = 3.0f;

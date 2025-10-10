@@ -152,7 +152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1193233874338825108
 Transform:
   m_ObjectHideFlags: 0
@@ -185,3 +185,7 @@ MonoBehaviour:
   m_bombPrefab: {fileID: 2780308575589180878}
   m_explosiveTransform: {fileID: 6952145686031662072}
   m_explosivePrefab: {fileID: 7417872589383201507, guid: 32aeceb00c5a97440993e3681f95bc9d, type: 3}
+  plantSE: {fileID: 8300000, guid: edc74f538bb8f53418eeac2cacb71107, type: 3}
+  tickSE: {fileID: 8300000, guid: 2e6474356edcf4c42b80a117f7867536, type: 3}
+  explodeSE: {fileID: 8300000, guid: 4cc49ee2b568b1742bfd7e197b31e0da, type: 3}
+  tickInterval: 0.25

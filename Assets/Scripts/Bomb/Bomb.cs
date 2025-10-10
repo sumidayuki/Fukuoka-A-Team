@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using UnityEditor;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
@@ -21,6 +22,13 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject m_bombPrefab;
     [SerializeField] Transform m_explosiveTransform;
     [SerializeField] GameObject m_explosivePrefab;
+    [SerializeField] private AudioClip plantSE;
+    [SerializeField] private AudioClip tickSE;
+    [SerializeField] private AudioClip explodeSE;
+
+    [SerializeField, Range(0.05f, 1f)]
+    private float tickInterval = 0.25f;
+    private float tickTimer;
 
     private void OnDisable()
     {
@@ -32,6 +40,8 @@ public class Bomb : MonoBehaviour
 
     public void Explode()
     {
+        if (SoundManager.Instance != null && explodeSE != null)
+            SoundManager.Instance.PlaySE(explodeSE);
         m_bombPrefab.SetActive(false);
         m_explosiveTransform.gameObject.SetActive(true);
         Destroy(this.gameObject, 0.5f);
@@ -77,6 +87,14 @@ public class Bomb : MonoBehaviour
         {
             m_myBomb.time -= Time.deltaTime;
 
+            tickTimer -= Time.deltaTime;
+            if (tickTimer <= 0f)
+            {
+                if (SoundManager.Instance != null && tickSE != null)
+                    SoundManager.Instance.PlaySE(tickSE);
+                tickTimer = tickInterval;
+            }
+                
             if(m_myBomb.time < 0)
             {
                 Explode();
@@ -90,6 +108,11 @@ public class Bomb : MonoBehaviour
         gameObject.transform.rotation = transform.rotation;
         m_bombPrefab.gameObject.SetActive(true);
         m_explosiveTransform.gameObject.SetActive(false);
+
+        if (SoundManager.Instance != null && plantSE != null)
+            SoundManager.Instance.PlaySE(plantSE);
+
+        tickTimer = tickInterval;
     }
 
     public void SetBomb(BombRow data)

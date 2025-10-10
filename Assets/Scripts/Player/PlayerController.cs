@@ -6,6 +6,7 @@ public class PlayerController : BaseUpdate
 {
     private Player player;
     private InputInfo input;
+    [SerializeField] private AudioClip plantSE;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class PlayerController : BaseUpdate
     {
         input = InputManager.Instance.Info;
         player = gameObject.AddComponent<Player>();
+        player.SE = plantSE;
         player.Enter();
     }
 

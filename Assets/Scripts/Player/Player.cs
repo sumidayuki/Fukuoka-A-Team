@@ -11,6 +11,8 @@ public class Player : MonoBehaviour, IDamageable
 
     public Animator Anim { get; private set; }
 
+    public AudioClip SE { get; set; }
+
     public PlayerCamera Cam { get; private set; }
 
     // データ由来のパラメータ

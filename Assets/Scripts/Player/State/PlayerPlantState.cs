@@ -28,6 +28,10 @@ public class PlayerPlantState : StateBase<Player>
 
     public override void Exit(Player player)
     {
+        if (SoundManager.Instance != null && player.SE != null)
+        {
+            SoundManager.Instance.PlaySE(player.SE);
+        }
         player.Anim.ResetTrigger("Plant");
     }
 }

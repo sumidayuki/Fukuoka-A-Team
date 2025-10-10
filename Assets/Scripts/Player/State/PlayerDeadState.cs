@@ -9,8 +9,9 @@ public class PlayerDeadState : StateBase<Player>
         if (player.Rb != null)
             player.Rb.velocity = Vector3.zero;
 
-        // TODO: 死亡エフェクト/モーション/SE
-        // TODO: GameManagerへ敗北通知 or StageManager経由で遷移
+        player.Anim.SetTrigger("Death");
+
+        StageManager.Instance.OnPlayerDeath();
     }
 
     public override void Execute(Player player, InputInfo input)

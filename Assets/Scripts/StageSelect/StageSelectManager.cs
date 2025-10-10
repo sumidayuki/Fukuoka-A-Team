@@ -23,7 +23,7 @@ public class StageSelectManager : BaseUpdate, IManageable
             yield return null;
         }
 
-        PlayerData playerData = DataManager.Instance.GetPlayerData();
+        PlayerRow playerData = DataManager.Instance.GetPlayerData();
 
         foreach (var row in stageData.rows)
         {
@@ -33,7 +33,7 @@ public class StageSelectManager : BaseUpdate, IManageable
             button.SetStageInfo(row.name, row.id);
 
             bool isUnlocked = row.id <= playerData.unlockedStageCount;
-            button.SetInteractable(isUnlocked);
+            button.gameObject.SetActive(isUnlocked);
             yield return null;
         }
     }

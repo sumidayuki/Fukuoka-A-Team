@@ -46,7 +46,7 @@ public class DataManager : MonoBehaviour
     /// PlayerData ‚ğæ“¾‚µ‚Ü‚·B
     /// </summary>
     /// <returns></returns>
-    public PlayerData GetPlayerData() { return playerData; }
+    public PlayerRow GetPlayerData() { return playerData.rows[0]; }
 
     /// <summary>
     /// BombData ‚©‚çw’è‚Ì”š’e‚ğæ“¾‚µ‚Ü‚·B

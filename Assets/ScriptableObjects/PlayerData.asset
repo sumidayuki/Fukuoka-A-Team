@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4fb272b2fbc524e8654e870a032138, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  unlockedStageCount: 0
+  rows:
+  - moveSpeed: 3
+    unlockedStageCount: 0

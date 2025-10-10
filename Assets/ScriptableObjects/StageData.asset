@@ -19,3 +19,9 @@ MonoBehaviour:
     bombIds: 0000000001000000
     bombCounts: 0300000003000000
     bgm: 
+  - id: 1
+    name: 
+    size: 080000000800000008000000
+    bombIds: 
+    bombCounts: 
+    bgm: 

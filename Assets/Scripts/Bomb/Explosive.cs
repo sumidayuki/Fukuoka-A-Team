@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Explosive : MonoBehaviour
 {
+
     private void OnTriggerEnter(Collider other)
     {
         IDamageable damageable = other.gameObject.GetComponentInParent<IDamageable>();
